@@ -1,0 +1,39 @@
+{
+    "name": "kosmosx/helpers",
+    "description": "Utilities helpers.",
+    "keywords": ["framework", "laravel", "lumen"],
+    "license": "MIT",
+    "type": "lumen",
+    "authors": [
+        {
+            "name": "Fabrizio Cafolla",
+            "email": "developer@fabriziocafolla.com"
+        }
+    ],
+
+    "require": {
+        "php": "^7.1.3"
+    },
+
+    "require-dev": {},
+
+    "autoload": {
+        "psr-4": {
+            "Kosmosx\\Helpers\\": "src/"
+        },
+        "files": [
+            "src/Functions/HelperFunctions.php"
+        ]
+    },
+
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
