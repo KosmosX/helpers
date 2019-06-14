@@ -35,12 +35,11 @@
 		 *  Default constructor.
 		 *
 		 * @param bool   $success
-		 * @param int $statusCode
+		 * @param int    $statusCode
 		 * @param array  $data
 		 * @param string $message
 		 */
-		public function __construct(bool $success = null, ?int $statusCode = null, ?array $data = array(), ?string $message = null)
-		{
+		public function __construct(bool $success = null, ?int $statusCode = null, $data = array(), ?string $message = null) {
 			$this->success = $success;
 			$this->data = $data;
 			$this->message = $message;
@@ -52,15 +51,14 @@
 		 *  Instances factory.
 		 *
 		 * @param bool   $success
-		 * @param int $statusCode
+		 * @param int    $statusCode
 		 * @param array  $data
 		 * @param string $message
 		 *
 		 * @return StatusService
 		 *    The instance.
 		 */
-		public static function set(bool $success, ?int $statusCode = null, ?array $data = array(), ?string $message = null): StatusService
-		{
+		public static function set(bool $success, ?int $statusCode = null, $data = array(), ?string $message = null): StatusService {
 			return new StatusService($success, $statusCode, $data, $message);
 		}
 
@@ -72,19 +70,29 @@
 		 * @return array
 		 *    The data array or the requested item if $key is set.
 		 */
-		public function data($keys = null):array
-		{
+		public function data($keys = null) {
+			if (false == is_array($this->data) || null == $keys)
+				return $this->data;
 
-			if (is_string($keys))
-				$keys = (array) $keys;
+			if (true === is_string($keys))
+				$keys = (array)$keys;
 
-			if (is_array($keys)) {
+			if (true === is_array($keys)) {
 				$data = array();
 				foreach ($keys as $key)
 					$data[last(explode('.', $key))] = array_get($this->data, $key, null);
 
 				return $data;
 			}
+		}
+
+		/**
+		 * @param $data
+		 *
+		 * @return array
+		 */
+		public function setData($data) {
+			$this->data = $data;
 
 			return $this->data;
 		}
@@ -99,8 +107,7 @@
 		 *    method failed (AND) with the specified
 		 *    status code.
 		 */
-		public function isFail(int $withStatusCode = null): bool
-		{
+		public function isFail(int $withStatusCode = null): bool {
 			if ($withStatusCode) {
 				return !$this->success && $withStatusCode === $this->statusCode;
 			}
@@ -112,8 +119,17 @@
 		 * @return string
 		 *        The message.
 		 */
-		public function message(): ?string
-		{
+		public function message(): ?string {
+			return $this->message;
+		}
+
+		/**
+		 * @param string $message
+		 *
+		 * @return null|string
+		 */
+		public function setMessage(string $message): ?string {
+			$this->message = $message;
 			return $this->message;
 		}
 
@@ -121,8 +137,12 @@
 		 * @return int
 		 *        The service status.
 		 */
-		public function status(): ?int
-		{
+		public function status(): ?int {
+			return $this->statusCode;
+		}
+
+		public function setStatus(int $statusCode): ?int {
+			$this->statusCode = $statusCode;
 			return $this->statusCode;
 		}
 
@@ -136,8 +156,7 @@
 		 *    method ran successfully AND with the specified
 		 *    status code.
 		 */
-		public function isSuccess(int $withStatusCode = null): bool
-		{
+		public function isSuccess(int $withStatusCode = null): bool {
 			if ($withStatusCode) {
 				return $this->success && $withStatusCode === $this->statusCode;
 			}
@@ -145,20 +164,18 @@
 			return $this->success;
 		}
 
-		public function toArray()
-		{
+		public function __toString() {
+			$toString = json_encode($this->toArray(), JSON_FORCE_OBJECT);
+			return $toString;
+		}
+
+		public function toArray() {
 			return array(
 				'success' => $this->success,
 				'data' => $this->data,
 				'message' => $this->message,
 				'statusCode' => $this->statusCode,
 			);
-		}
-
-		public function __toString()
-		{
-			$toString = json_encode($this->toArray(),JSON_FORCE_OBJECT);
-			return $toString;
 		}
 
 	}
