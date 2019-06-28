@@ -9,6 +9,8 @@
 	namespace Kosmosx\Helpers\Status;
 
 
+	use Illuminate\Support\Arr;
+
 	class StatusService
 	{
 		/**
@@ -20,6 +22,11 @@
 		 * @var array
 		 */
 		protected $data;
+
+		/**
+		 * @var array
+		 */
+		protected $validate;
 
 		/**
 		 * @var string
@@ -38,12 +45,14 @@
 		 * @param int    $statusCode
 		 * @param array  $data
 		 * @param string $message
+		 * @param array|null $validate
 		 */
-		public function __construct(bool $success = null, ?int $statusCode = null, $data = array(), ?string $message = null) {
+		public function __construct(bool $success = null, ?int $statusCode = null, $data = array(), ?string $message = null, ?array $validate = array()) {
 			$this->success = $success;
 			$this->data = $data;
-			$this->message = $message;
 			$this->statusCode = $statusCode;
+			$this->message = $message;
+			$this->validate = $validate;
 		}
 
 		/**
@@ -63,27 +72,46 @@
 		}
 
 		/**
-		 * @param string|array $key
+		 * @param null $keys
+		 *
+		 * @return array
+		 */
+		public function data($keys = null) {
+			return $this->search($this->data,$keys);
+		}
+
+		/**
+		 * @param null $keys
+		 *
+		 * @return array
+		 */
+		public function validate($keys = null) {
+			return $this->search($this->validate,$keys);
+		}
+
+		/**
+		 *
+		 * @param $stack
+		 * @param string|array $keys
 		 *    Optional key in the data associative array.
 		 *    Key maybe use DOT notation
 		 *
 		 * @return array
 		 *    The data array or the requested item if $key is set.
 		 */
-		public function data($keys = null) {
-			if (false == is_array($this->data) || null == $keys)
-				return $this->data;
+		protected function search($stack, $keys) {
+			if (false == is_array($stack) || null == $keys)
+				return $stack;
 
 			if (true === is_string($keys))
 				$keys = (array)$keys;
 
-			if (true === is_array($keys)) {
-				$data = array();
-				foreach ($keys as $key)
-					$data[last(explode('.', $key))] = array_get($this->data, $key, null);
+			$data = array();
 
-				return $data;
-			}
+			foreach ($keys as $key)
+				$data[last(explode('.', $key))] = Arr::get($stack, $key, null);
+
+			return $data;
 		}
 
 		/**
@@ -94,7 +122,22 @@
 		public function setData($data) {
 			$this->data = $data;
 
-			return $this->data;
+			return $this;
+		}
+
+		/**
+		 * @param array|null $validate
+		 * @param bool       $setFailStatus
+		 *
+		 * @return array|null
+		 */
+		public function setValidate(?array $validate, bool $setFailStatus = true) {
+			if(true === $setFailStatus)
+				$this->success = false;
+
+			$this->validate = $validate;
+
+			return $this;
 		}
 
 		/**
@@ -116,6 +159,13 @@
 		}
 
 		/**
+		 * @return bool
+		 */
+		public function isValidate(){
+			return $this->validate ? true : false;
+		}
+
+		/**
 		 * @return string
 		 *        The message.
 		 */
@@ -130,7 +180,7 @@
 		 */
 		public function setMessage(string $message): ?string {
 			$this->message = $message;
-			return $this->message;
+			return $this;
 		}
 
 		/**
@@ -141,9 +191,14 @@
 			return $this->statusCode;
 		}
 
+		/**
+		 * @param int $statusCode
+		 *
+		 * @return int|null
+		 */
 		public function setStatus(int $statusCode): ?int {
 			$this->statusCode = $statusCode;
-			return $this->statusCode;
+			return $this;
 		}
 
 		/**
@@ -174,7 +229,7 @@
 				'success' => $this->success,
 				'data' => $this->data,
 				'message' => $this->message,
-				'statusCode' => $this->statusCode,
+				'status_code' => $this->statusCode,
 			);
 		}
 

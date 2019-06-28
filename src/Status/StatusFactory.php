@@ -21,25 +21,25 @@
 		 *    Custom data.
 		 * @param string $message
 		 *    A message.
+		 * @param array|null  $validate
 		 *
-		 * @return StatusService
+		 * @return \Kosmosx\Helpers\Status\StatusService
 		 */
-		public static function fail(?int $statusCode = null, $data = array(), string $message = null): StatusService {
-			return StatusService::set(false, $statusCode, $data, $message);
+		public static function fail(?int $statusCode = null, $data = array(), string $message = null, ?array $validate = array()): StatusService {
+			return StatusService::set(false, $statusCode, $data, $message, $validate);
 		}
 
 		/**
 		 *    Helper function to wrap StatusService return.
 		 *
-		 * @param array         $data
-		 *    The data this service is returing.
-		 * @param null          $statusCode
-		 * @param string|string $message
-		 *    A message.
+		 * @param int|null    $statusCode
+		 * @param array       $data
+		 * @param string|null $message
+		 * @param array|null  $validate
 		 *
-		 * @return ServiceStatus
+		 * @return \Kosmosx\Helpers\Status\StatusService
 		 */
-		public static function success(?int $statusCode = null, $data = array(), string $message = null): StatusService {
-			return StatusService::set(true, $statusCode, $data, $message);
+		public static function success(?int $statusCode = null, $data = array(), string $message = null, ?array $validate = array()): StatusService {
+			return StatusService::set(true, $statusCode, $data, $message, $validate);
 		}
 	}
