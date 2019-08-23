@@ -21,8 +21,8 @@
 		 */
 		public function register()
 		{
-			class_alias(\Kosmosx\Helpers\Status\StatusFactoryFacade::class, 'StatusFactory');
-			class_alias(\Kosmosx\Helpers\Status\StatusFacade::class, 'Status');
+			$this->app->alias(\Kosmosx\Helpers\Status\StatusFactoryFacade::class, 'StatusFactory');
+			$this->app->alias(\Kosmosx\Helpers\Status\StatusFacade::class, 'Status');
 
 			$this->app->bind('service.status', 'Kosmosx\Helpers\Status\StatusService');
 			$this->app->singleton('factory.support', 'Kosmosx\Helpers\Status\StatusFactory');
