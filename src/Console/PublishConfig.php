@@ -41,7 +41,7 @@
 			$this->files = $files;
 
 			$fromPath =  str_replace('Console','config',__DIR__);
-
+			
 			$this->fileMap = [
 				$fromPath.'/filesystems.php' => app()->basePath('config/filesystems.php'),
 				$fromPath.'/api.php' => app()->basePath('config/api.php'),

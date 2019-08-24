@@ -1,11 +1,6 @@
 <?php
-	/**
-	 * Created by PhpStorm.
-	 * User: fabrizio
-	 * Date: 18/01/19
-	 * Time: 12.41
-	 */
-	[
+	
+	return [
 		'cors' => [
 			'standard' => [
 				'Access-Control-Allow-Origin'      => env('CORS_ALLOW_ORIGIN', '*'),

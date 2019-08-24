@@ -73,6 +73,23 @@
 		}
 	}
 
+	if (!function_exists('register_alias')) {
+		/**
+		 * @param string $class
+		 * @param string $alias
+		 * @return bool
+		 */
+		function register_alias(string $class, string $alias): bool
+		{
+			if (class_exists($alias))
+				return false;
+
+			class_alias($class, $alias);
+
+			return true;
+		}
+	}
+
 	if (!function_exists('get_config_env')) {
 		/**
 		 * Get elements of the config file with APP_ENV environment

@@ -21,8 +21,16 @@
 		 */
 		public function register()
 		{
-			$this->app->alias(\Kosmosx\Helpers\Status\StatusFactoryFacade::class, 'StatusFactory');
-			$this->app->alias(\Kosmosx\Helpers\Status\StatusFacade::class, 'Status');
+
+			try {
+				$this->app->configure('filesystems');
+				$this->app->configure('api');
+			} catch (\Exception $e) {
+				throw new $e;
+			}
+
+			register_alias(\Kosmosx\Helpers\Status\StatusFactoryFacade::class, 'StatusFactory');
+			register_alias(\Kosmosx\Helpers\Status\StatusFacade::class, 'Status');
 
 			$this->app->bind('service.status', 'Kosmosx\Helpers\Status\StatusService');
 			$this->app->singleton('factory.support', 'Kosmosx\Helpers\Status\StatusFactory');
